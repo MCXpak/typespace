@@ -92,7 +92,7 @@ function draw() {
 
     //Check asteroid input
     if(asteroidToPoint === -1){
-      ship.rotateTo(0,3);
+      ship.rotateTo(0,100000);
     }
     // if(kb.pressed(key)){
     //   console.log(key)
@@ -195,7 +195,7 @@ function rotateShip(){
   // ship.display();
   // animateThrusters();
   // pop();
-  ship.rotate(-shipRotationCalc());
+  ship.rotate(shipRotationCalc(),100000);
 }
 
 class BackgroundComponent{
@@ -292,7 +292,7 @@ function fireProjectile(astCoords){
   projectile.img = "./assets/projectiles/projectile02-1.png";
   projectile.position = { x: ship.x, y: ship.y-40}
   projectile.mass = 0.0001;
-  projectile.rotateTo({x: astCoords[0], y: astCoords[1]}, 10);
+  projectile.rotateTo(-shipRotationCalc(), 10);
   projectile.moveTowards({x: astCoords[0], y: astCoords[1]}, 0.005)
   projectileArray.push(projectile);
   // let projectile = new Projectile(astCoords[0], astCoords[1]);
