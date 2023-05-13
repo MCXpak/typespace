@@ -1,0 +1,9 @@
+#defaultCanvas0 {
+    position: absolute;
+    left: 150px;
+    top: 100px;
+}
+
+*{
+    background-color: black;
+}
