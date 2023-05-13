@@ -15,15 +15,11 @@ let shipCoords = [260, 450];
 let thrusterArray = [];
 let thrusterFrameCount = 0;
 let asteroidToPoint = -1;
-let asteroidToPointIndex = 0;
 let asteroidExplosionArray = [];
 let asteroidFrameCount = 0;
 let projectileArray = [];
 let playExplodeAsteroid = false;
 let stringStack = [];
-let projectiles;
-let asteroids;
-
 
 //Array containing live asteroids
 let asteroidArray = [];
@@ -59,15 +55,8 @@ function setup() {
     ship = new Ship();
     ship = new Sprite();
     ship.img = Ship.image;
-    ship.mass = 1000;
     ship.x = 300;
     ship.y = 500;
-    ship.diameter = 16;
-
-    projectiles = new Group();
-    asteroids = new Group();
-
-    //asteroids.overlaps(projectiles);
     //ship.p5Image = loadImage(Ship.image, 200, 200)
   }
   
@@ -80,18 +69,19 @@ function draw() {
     background(bg);
     animateBackground();
     generateAsteroids();
-
     //Display Asteroids
-    // asteroidArray.forEach( ast => {
-    //   if(ast.destroy === false){
-    //     ast.display();
-    //   } else {
-    //     ast.animateAsteroidExplosion();
-    //   }
-    // });
+    asteroidArray.forEach( ast => {
+      if(ast.destroy === false){
+        ast.display();
+      } else {
+        ast.animateAsteroidExplosion();
+      }
+    });
+    
 
     //Check asteroid input
     if(asteroidToPoint === -1){
+      console.log(asteroidToPoint);
       ship.rotateTo(0,3);
     }
     // if(kb.pressed(key)){
@@ -103,8 +93,11 @@ function draw() {
     displayText(stringStack);
 
     //check projectiles to fire
-    if(projectiles.length > 0 && asteroids.length > 0){
+    if(projectileArray.length > 0){
       checkProjectileCollision();
+      if(projectileArray.length > 0){
+        projectileArray.forEach( proj => proj.display());
+      }
     }
 
     checkShipCollision();
@@ -114,21 +107,9 @@ function draw() {
 function generateAsteroids(){
   if(frameCount % 240 == 0 && wordList.length > 0){
     let num = Math.floor(Math.random() * wordList.length);
-    //let asteroid = new Asteroid(frameCount, wordList[num]);
-    let asteroid = new asteroids.Sprite();
-    asteroid.id = frameCount;
-    asteroid.img = "./assets/asteroid/asteroid-base.png";
-    asteroid.diameter = 60;
-    asteroid.mass = 10000;
-    asteroid.x = Math.floor(Math.random() * 600) + 20;
-    asteroid.y = Math.floor(Math.random() * 200) + 0;
-    asteroid.code = wordList[num];
-    asteroid.text = wordList[num];
-    asteroid.textColor = "#009699";
-    asteroid.textSize = 30;
-    asteroid.moveTowards(ship, 0.001)
+    let asteroid = new Asteroid(frameCount, wordList[num]);
     wordList.splice(num, 1);
-    //asteroid.p5Image = loadImage(Asteroid.image, 200, 50);
+    asteroid.p5Image = loadImage(Asteroid.image, 200, 50);
     asteroidArray.push(asteroid)
   }
 }
@@ -178,10 +159,9 @@ function shipRotationCalc(){
   if (asteroidToPoint === -1){
     return 0
   } else {
-    let asteroidPointedAt = asteroidArray.filter( (ast) => ast.id === asteroidToPoint);
-    console.log()
+    let asteroidPointedAt = asteroidArray.filter(ast => ast.id === asteroidToPoint);
     if(asteroidPointedAt !== undefined){
-      return atan((asteroidPointedAt[0].x-ship.x)/(asteroidPointedAt[0].y-ship.y));
+      return atan((asteroidPointedAt[0].position.x+40-ship.x)/(asteroidPointedAt[0].position.y+40-ship.y));
     }
   }
 }
@@ -232,20 +212,30 @@ class Ship{
 
 }
 
-class Text{
-  constructor(id,code,x,y){
+class Asteroid {
+  constructor(id,code){
       this.id = id;
       this.code = code;
-      this.x = x
-      this.y = y
+      this.health = code.length;
+      this.p5Image;
+      this.delta = -1000;
+      this.x = Math.floor(Math.random() * 600) + 20;
+      this.y = Math.floor(Math.random() * 200) + 0;
+      this.speed = Math.floor(Math.random() * 1000) + 600;
+      this.position = new p5.Vector(this.x, this.y);
+      this.velocity = [(shipCoords[0]-24-this.x)/this.speed, (shipCoords[1]-24-this.y)/this.speed];
+      this.destroy = false;
   }
 
   static image = "./assets/asteroid/asteroid-base.png";
 
   display(){
+    this.position.add(this.velocity);
+    //ellipse(this.position.x+72, this.position.y+72, 110);
+    image(this.p5Image, this.position.x, this.position.y, 96*1.5, 96*1.5);
     textSize(32);
     fill(0, 150, 153);
-    text(this.code, this.x+((96*1.5)/2-30), this.y+((96*1.5)/2+15));
+    text(this.code, this.position.x+((96*1.5)/2-30), this.position.y+((96*1.5)/2+15));
   }
 
   animateAsteroidExplosion(){
@@ -288,40 +278,19 @@ class Projectile{
 }
 
 function fireProjectile(astCoords){
-  let projectile = new projectiles.Sprite();
-  projectile.img = "./assets/projectiles/projectile02-1.png";
-  projectile.position = { x: ship.x, y: ship.y-40}
-  projectile.mass = 0.0001;
-  projectile.rotateTo({x: astCoords[0], y: astCoords[1]}, 10);
-  projectile.moveTowards({x: astCoords[0], y: astCoords[1]}, 0.005)
+  let projectile = new Projectile(astCoords[0], astCoords[1]);
+  projectile.p5Image = loadImage(Projectile.image);
   projectileArray.push(projectile);
-  // let projectile = new Projectile(astCoords[0], astCoords[1]);
-  // projectile.p5Image = loadImage(Projectile.image);
-  // projectileArray.push(projectile);
 }
 
 function checkProjectileCollision(){
-  //console.log(asteroids[asteroidToPointIndex]);
-  projectiles.forEach( proj => {
-    asteroids.forEach( ast => {
-      if(ast.id !== asteroidToPoint){
-        ast.overlaps(proj)
-      } else{
-        ast.collides(proj)
-      }
-    })
-  })
-
-  projectiles.forEach( proj => {
-    asteroids.forEach( ast => {
-      if(ast.collides(proj)){
+  asteroidArray.forEach( (ast, i) => {
+    projectileArray.forEach( (proj, j) => {
+      if(ast.collided(proj)){
         console.log("collided");
-        ast.remove();
-        proj.remove();
       }
     })
   })
-
   // let count = 0;
   // let asteroidToDestroyIndex = 0;
   // let minDistance = 40;
