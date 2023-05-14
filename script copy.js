@@ -57,6 +57,8 @@ function setup() {
     ship.img = Ship.image;
     ship.x = 300;
     ship.y = 500;
+
+    projectiles.overlaps(projectiles)
     //ship.p5Image = loadImage(Ship.image, 200, 200)
   }
   

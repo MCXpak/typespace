@@ -6,14 +6,20 @@ function checkInput(char, asteroidArray){
     } else {
         stringStack.push(char);
         asteroidArray.forEach( (asteroid, index) => {
-            if(asteroid.code.includes(stringStack.join(""))){
+            //console.log(asteroid.code.substr(0,stringStack.length))
+            if(asteroid.code.substr(0,stringStack.length) === stringStack.join("")){
                 asteroidToPoint = asteroid.id;
                 asteroidToPointIndex = index
                 if(currentAstPointAt !== asteroid.id){
                     ship.rotateTo(-shipRotationCalc(),3)
                 }
                 let asteroidToExplodeCoords = [asteroid.x, asteroid.y]
-                fireProjectile(asteroidToExplodeCoords);
+                console.log(`Diff: ${asteroid.maxHealth - asteroid.health}, Len: ${stringStack.length}`)
+                if(asteroid.maxHealth - asteroid.pseudoHealth < stringStack.length){
+                    asteroid.pseudoHealth -= 1;
+                    fireProjectile(asteroidToExplodeCoords);
+                }
+                
             }
         })
     }
@@ -22,3 +28,7 @@ function checkInput(char, asteroidArray){
     }
 }
 
+//Check all asteroids
+//If first character is a match, only check this asteroid
+//Continue to check asteroid until it is destroyed
+//Reset
