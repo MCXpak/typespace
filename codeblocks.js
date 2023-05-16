@@ -15,7 +15,6 @@ function checkInput(char, asteroidArray){
                     rotateThrusters(-shipRotationCalc());
                 }
                 let asteroidToExplodeCoords = [asteroid.x, asteroid.y]
-                console.log(`Diff: ${asteroid.maxHealth - asteroid.health}, Len: ${stringStack.length}`)
                 if(asteroid.maxHealth - asteroid.pseudoHealth < stringStack.length){
                     asteroid.pseudoHealth -= 1;
                     fireProjectile(asteroidToExplodeCoords, asteroidToPoint);

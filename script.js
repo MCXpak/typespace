@@ -75,6 +75,16 @@ function setup() {
     './assets/asteroid/asteroid-base.png'    
   );
 
+  asteroidExplosionAni = loadAnimation(
+    './assets/asteroid/asteroid-explode-01.png',
+    './assets/asteroid/asteroid-explode-02.png',
+    './assets/asteroid/asteroid-explode-03.png',
+    './assets/asteroid/asteroid-explode-04.png',
+    './assets/asteroid/asteroid-explode-05.png',
+    './assets/asteroid/asteroid-explode-06.png',
+    './assets/asteroid/asteroid-explode-07.png',
+  )
+
   thrusterAni.frameDelay = 5;
   thruster = new Sprite();
   thruster.addAni(thrusterAni);
@@ -90,6 +100,7 @@ function setup() {
 
   projectiles = new Group();
   asteroids = new Group();
+  asteroids.addAni('explode', asteroidExplosionAni)
   asteroids.addAni('base', asteroidBaseAni);
   asteroids.addAni('hit', asteroidHitAni);
 
@@ -127,6 +138,9 @@ function draw() {
   checkShipCollision();
   ship.debug = mouse.pressing();
   asteroids.debug = mouse.pressing();
+  
+  checkAsteroidToExplode();
+  
 }
 
 function generateAsteroids() {
@@ -138,7 +152,6 @@ function generateAsteroids() {
     asteroid.img = "./assets/asteroid/asteroid-base.png";
     asteroid.diameter = 25;
     asteroid.mass = 10000;
-    asteroid.ani = ['hit', 'base'];
     asteroid.frameDelay = 10;
     asteroid.x = Math.floor(Math.random() * 600) + 20;
     asteroid.y = Math.floor(Math.random() * 200) + 0;
@@ -210,7 +223,6 @@ function shipRotationCalc() {
     return 0
   } else {
     let asteroidPointedAt = asteroidArray.filter((ast) => ast.id === asteroidToPoint);
-    console.log()
     if (asteroidPointedAt !== undefined) {
       return atan((asteroidPointedAt[0].x - ship.x) / (asteroidPointedAt[0].y - ship.y));
     }
@@ -268,14 +280,11 @@ class Text {
 
 function fireProjectile(astCoords, astId) {
   let a = -shipRotationCalc()
-  console.log(a);
   let projectile = new projectiles.Sprite();
   projectile.img = "./assets/projectiles/projectile02-1.png";
   //Projectile position relative to nose of ship
   let x = ship.x-16*sin(-a);
   let y = ship.y-16*cos(-a);
-  console.log(x)
-  console.log(y)
   projectile.position = { x: x, y: y };
   projectile.mass = 0.0001;
   projectile.astTargetId = astId;
@@ -298,16 +307,30 @@ function checkProjectileCollision() {
   projectiles.forEach(proj => {
     asteroids.forEach(ast => {
       if (ast.collides(proj)) {
-        console.log("collided");
         ast.health -= 1; 
         proj.remove();
         ast.ani = ['hit', 'base'];
-        console.log(ast.ani)
       }
       if (ast.health <= 0){
-        ast.remove();
+        // ast.changeAni('explode');
+        // console.log(ast.ani.name);
+        // ast.ani.loop();
+        //ast.remove();
       }
     })
+  })
+}
+
+function checkAsteroidToExplode(){
+  asteroids.forEach( ast => {
+    if(ast.health <= 0){
+      ast.ani = 'explode';
+      if(ast.ani.lastFrame === ast.ani.frame){
+        ast.remove();
+      }
+      //ast.ani.onComplete = ast.remove();
+      //console.log(ast.ani.onComplete);
+    }
   })
 }
 
