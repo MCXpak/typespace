@@ -23,6 +23,9 @@ let playExplodeAsteroid = false;
 let stringStack = [];
 let projectiles;
 let asteroids;
+let thruster;
+let asteroidHitAni;
+let asteroidBaseAni;
 
 //Array containing live asteroids
 let asteroidArray = [];
@@ -55,17 +58,44 @@ function setup() {
   starArray.push(new BackgroundComponent(bg_stars, -400, 0.1));
   planetArray.push(new BackgroundComponent(bg_planets, -400, 1));
   
+  let thrusterAni = loadAnimation(
+    './assets/thrusters/vertical-thrust-01.png',
+    './assets/thrusters/vertical-thrust-02.png',
+    './assets/thrusters/vertical-thrust-03.png',
+    './assets/thrusters/vertical-thrust-04.png'
+  );
+
+  asteroidBaseAni = loadAnimation(
+    './assets/asteroid/asteroid-base.png'
+  )
+
+  asteroidHitAni = loadAnimation(
+    './assets/asteroid/asteroid-base-hit-01.png',
+    './assets/asteroid/asteroid-base-hit-02.png',
+    './assets/asteroid/asteroid-base.png'    
+  );
+
+  thrusterAni.frameDelay = 5;
+  thruster = new Sprite();
+  thruster.addAni(thrusterAni);
+  thruster.x = 300;
+  thruster.y = 530;
+
   ship = new Sprite();
-  ship.img = "./assets/ships/blue_01.png";
+  ship.img = "./assets/ships/purple_03.png";
   ship.mass = 1000;
   ship.x = 300;
   ship.y = 500;
-  ship.diameter = 16;
+  ship.diameter = 32;
 
   projectiles = new Group();
   asteroids = new Group();
+  asteroids.addAni('base', asteroidBaseAni);
+  asteroids.addAni('hit', asteroidHitAni);
 
   projectiles.overlaps(projectiles);
+  projectiles.overlaps(ship);
+  ship.overlaps(thruster);
 }
 
 document.addEventListener("keydown", (e) => {
@@ -77,33 +107,39 @@ function draw() {
   animateBackground();
   generateAsteroids();
 
+  //animateThrusters();
+  //animation(thrusterAni,ship.x,ship.y+30)
+
   //Check asteroid input
   if (asteroidToPoint === -1) {
     ship.rotateTo(0, 100000);
+    thruster.rotateTo(0, 100000);
+    thruster.x = 300;
+    thruster.y = 530;
   }
   key = '';
 
   //Display currently typed characters on screen
   displayText(stringStack);
 
-  //check projectiles to fire
-  if (projectiles.length > 0 && asteroids.length > 0) {
-    checkProjectileCollision();
-  }
+  checkProjectileCollision();
 
   checkShipCollision();
-
+  ship.debug = mouse.pressing();
+  asteroids.debug = mouse.pressing();
 }
 
 function generateAsteroids() {
-  if (frameCount % 240 == 0 && wordList.length > 0) {
+  if (frameCount === 10 || frameCount % 240 == 0 && wordList.length > 0) {
     let num = Math.floor(Math.random() * wordList.length);
     //let asteroid = new Asteroid(frameCount, wordList[num]);
     let asteroid = new asteroids.Sprite();
     asteroid.id = frameCount;
     asteroid.img = "./assets/asteroid/asteroid-base.png";
-    asteroid.diameter = 60;
+    asteroid.diameter = 25;
     asteroid.mass = 10000;
+    asteroid.ani = ['hit', 'base'];
+    asteroid.frameDelay = 10;
     asteroid.x = Math.floor(Math.random() * 600) + 20;
     asteroid.y = Math.floor(Math.random() * 200) + 0;
     asteroid.code = wordList[num];
@@ -113,7 +149,7 @@ function generateAsteroids() {
     asteroid.maxHealth = wordList[num].length;
     asteroid.textColor = "#009699";
     asteroid.textSize = 30;
-    asteroid.moveTowards(ship, 0.001)
+    asteroid.moveTowards(ship, 0.001);
     wordList.splice(num, 1);
     //asteroid.p5Image = loadImage(Asteroid.image, 200, 50);
     asteroidArray.push(asteroid)
@@ -124,6 +160,14 @@ function displayText(stringStack) {
   textSize(60);
   fill(0, 102, 153)
   text(stringStack.join(""), 200, 550);
+}
+
+function rotateThrusters(a){
+  let x = ship.x+30*sin(-a);
+  let y = ship.y+30*cos(-a);
+  thruster.rotateTo(-shipRotationCalc(), 10000);
+  thruster.x = x;
+  thruster.y = y;
 }
 
 // BACKGROUND //
@@ -171,10 +215,6 @@ function shipRotationCalc() {
       return atan((asteroidPointedAt[0].x - ship.x) / (asteroidPointedAt[0].y - ship.y));
     }
   }
-}
-
-function rotateShip() {
-  ship.rotate(shipRotationCalc(), 100000);
 }
 
 class BackgroundComponent {
@@ -226,20 +266,28 @@ class Text {
   }
 }
 
-function fireProjectile(astCoords) {
+function fireProjectile(astCoords, astId) {
+  let a = -shipRotationCalc()
+  console.log(a);
   let projectile = new projectiles.Sprite();
   projectile.img = "./assets/projectiles/projectile02-1.png";
-  projectile.position = { x: ship.x, y: ship.y - 40 }
+  //Projectile position relative to nose of ship
+  let x = ship.x-16*sin(-a);
+  let y = ship.y-16*cos(-a);
+  console.log(x)
+  console.log(y)
+  projectile.position = { x: x, y: y };
   projectile.mass = 0.0001;
-  projectile.rotateTo(-shipRotationCalc(), 10);
-  projectile.moveTowards({ x: astCoords[0], y: astCoords[1] }, 0.005)
+  projectile.astTargetId = astId;
+  projectile.rotateTo(a, 1000);
+  projectile.moveTo({ x: astCoords[0], y: astCoords[1] }, 7);
   projectileArray.push(projectile);
 }
 
 function checkProjectileCollision() {
   projectiles.forEach(proj => {
     asteroids.forEach(ast => {
-      if (ast.id !== asteroidToPoint) {
+      if (ast.id !== proj.astTargetId) {
         ast.overlaps(proj)
       } else {
         ast.collides(proj)
@@ -250,13 +298,14 @@ function checkProjectileCollision() {
   projectiles.forEach(proj => {
     asteroids.forEach(ast => {
       if (ast.collides(proj)) {
-        console.log("collided");   
+        console.log("collided");
         ast.health -= 1; 
         proj.remove();
+        ast.ani = ['hit', 'base'];
+        console.log(ast.ani)
       }
       if (ast.health <= 0){
         ast.remove();
-        stringStack = [];
       }
     })
   })
