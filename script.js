@@ -324,6 +324,7 @@ function checkProjectileCollision() {
 function checkAsteroidToExplode(){
   asteroids.forEach( ast => {
     if(ast.health <= 0){
+      ast.text = ''
       ast.ani = 'explode';
       if(ast.ani.lastFrame === ast.ani.frame){
         ast.remove();
