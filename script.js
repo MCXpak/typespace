@@ -144,7 +144,7 @@ function draw() {
 }
 
 function generateAsteroids() {
-  if (frameCount === 10 || frameCount % 240 == 0 && wordList.length > 0) {
+  if (frameCount === 10 || frameCount % 150 == 0 && wordList.length > 0) {
     let num = Math.floor(Math.random() * wordList.length);
     //let asteroid = new Asteroid(frameCount, wordList[num]);
     let asteroid = new asteroids.Sprite();
@@ -165,7 +165,7 @@ function generateAsteroids() {
     asteroid.moveTowards(ship, 0.001);
     wordList.splice(num, 1);
     //asteroid.p5Image = loadImage(Asteroid.image, 200, 50);
-    asteroidArray.push(asteroid)
+    asteroidArray.push(asteroid);
   }
 }
 
@@ -182,8 +182,6 @@ function rotateThrusters(a){
   thruster.x = x;
   thruster.y = y;
 }
-
-// BACKGROUND //
 
 function animateBackground() {
   dustArray.forEach(dust => dust.display());
