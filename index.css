@@ -51,9 +51,24 @@ body * {
     /* padding-top: 17px;  */
 }
 
-.key:hover {
-  /* border: 1px solid #eeeeee; */
-  
+@keyframes press {
+    0% {
+        background-color: #fff; 
+    }
+    100% {
+        background-color: #adafbc;
+    }
+}
+
+.pressed {
+    color: green;
+    animation-name: press;
+    animation-duration: 2s;
+    /* color: #212529; */
+    /* text-decoration: none;
+    color: #bfbfbf;
+    position: absolute; */
+    /* box-shadow: inset 4px 4px #adafbc; */
 }
 
 .delete {

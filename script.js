@@ -109,8 +109,20 @@ function setup() {
   ship.overlaps(thruster);
 }
 
+let keyboardKeys = document.getElementsByClassName("key nes-btn");
+//const mouseoverEvent = new Event('mouseover');
+
 document.addEventListener("keydown", (e) => {
   checkInput(e.key, asteroidArray);
+  console.log(e.key)
+  document.getElementById(`${e.key}-key`).style.animation = "press 0.1s 1"
+})
+
+keyboardKeys.forEach( key => {
+  key.addEventListener("animationend", () => {
+    console.log("ended")
+    key.style.animation = ""
+  })
 })
 
 function draw() {
