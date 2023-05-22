@@ -1,0 +1,113 @@
+#defaultCanvas0 {
+    position: absolute;
+    left: 25%;
+    top: 100px;
+}
+
+*{
+    background-color: black;
+}
+
+
+body * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Press Start 2P', sans-serif;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    border-image-repeat: stretch;
+}
+
+.keyboard-base {
+    max-width: max-content;
+    padding: 20px;
+    position: absolute;
+    top: 80%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgb(197, 197, 197);
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: repeat(30, 40px);
+    grid-template-rows: repeat(5, 80px);
+    grid-gap: 10px;
+}
+
+@media (-webkit-min-device-pixel-ratio: 0) and (min-resolution: 0.001dpcm){
+    .key.nes-btn {
+        border-image-repeat: stretch;
+    }
+}
+
+
+.key {
+    /* /* background-color: rgb(243, 243, 243); */
+    /* border: 2px solid black; */
+    /* border-radius: 5px; */
+    grid-column: span 2;
+    /* font-size: 20px; */
+    text-align: center;
+    /* padding-top: 17px;  */
+}
+
+@keyframes press {
+    0% {
+        background-color: #fff; 
+    }
+    100% {
+        background-color: #adafbc;
+    }
+}
+
+.pressed {
+    color: green;
+    animation-name: press;
+    animation-duration: 2s;
+    /* color: #212529; */
+    /* text-decoration: none;
+    color: #bfbfbf;
+    position: absolute; */
+    /* box-shadow: inset 4px 4px #adafbc; */
+}
+
+.delete {
+    grid-column: span 4;
+}
+
+.tab {
+    grid-column: span 3;
+}
+
+.backslash {
+    grid-column: span 3;
+}
+
+.capslock {
+    grid-column: span 4;
+}
+
+.return {
+    grid-column: span 4;
+}
+
+.leftshift {
+    grid-column: span 5;
+}
+
+.rightshift {
+    grid-column: span 5;
+}
+
+.leftctrl {
+    grid-column: span 3;
+}
+
+.command {
+    grid-column: span 3;
+    font-size: 14px;
+}
+
+.space {
+    grid-column: span 13;
+}
