@@ -268,7 +268,7 @@ function animateComponent(arr, component, speed) {
     arr.push(new BackgroundComponent(component, -1000, speed));
   }
 
-  if (arr[0].delta > 1000) {
+  if (arr[0].delta >= 1000) {
     arr.splice(0, 1);
     return arr;
   }

@@ -1,10 +1,12 @@
 #defaultCanvas0 {
     position: absolute;
     z-index: -1;
-    left:        50%;        /* Start with top left in the center */
-    top:         50%;
-    margin-left: -500px;     /* Shift over half the width */
-    margin-top:  -500px;      /* Shift up half the height */
+    left: 50%; 
+    top: 50%;
+    margin-left: -500px;    
+    margin-top: -430px;  
+    border-radius: 30px;  
+    border: 1px solid black;  
 }
 
 #p5play-intro {
@@ -21,12 +23,12 @@
     position: absolute;
     z-index: 1;
     background: none;
-    left:        50%;        /* Start with top left in the center */
-    top:         50%;
-    width:       200px;      /* The fixed width... */
-    height:      100px;      /* ...and height */
-    margin-left: -100px;     /* Shift over half the width */
-    margin-top:  -300px;      /* Shift up half the height */
+    left: 50%;
+    top: 50%;
+    width: 200px;
+    height: 100px;
+    margin-left: -100px;
+    margin-top: -300px;
 }
 
 .titleButtons{
@@ -94,7 +96,7 @@ body * {
     max-width: max-content;
     padding: 20px;
     position: absolute;
-    top: 80%;
+    top: 83%;
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: rgb(197, 197, 197);
