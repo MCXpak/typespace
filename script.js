@@ -44,7 +44,7 @@ function preload() {
 
 function setup() {
   angleMode('degrees');
-  createCanvas(600, 600);
+  createCanvas(1000, 600);
   bg = loadImage("./assets/background/space_background.png", 0, 0);
   bg_stars = loadImage("./assets/background/space_stars.png", 0, 0);
   bg_dust = loadImage("./assets/background/space_dust.png", 0, 0);
@@ -53,10 +53,10 @@ function setup() {
   start = loadImage("./assets/start.png");
   title = loadImage("./assets/typespace.png");
 
-  dustArray.push(new BackgroundComponent(bg_dust, -400, 0.2));
-  nebulaArray.push(new BackgroundComponent(bg_nebula, -400, 0.5));
-  starArray.push(new BackgroundComponent(bg_stars, -400, 0.1));
-  planetArray.push(new BackgroundComponent(bg_planets, -400, 1));
+  dustArray.push(new BackgroundComponent(bg_dust, -400, 0.1));
+  nebulaArray.push(new BackgroundComponent(bg_nebula, -400, 0.4));
+  starArray.push(new BackgroundComponent(bg_stars, -400, 0.05));
+  planetArray.push(new BackgroundComponent(bg_planets, -400, 0.3));
   
   let thrusterAni = loadAnimation(
     './assets/thrusters/vertical-thrust-01.png',
@@ -88,13 +88,13 @@ function setup() {
   thrusterAni.frameDelay = 5;
   thruster = new Sprite();
   thruster.addAni(thrusterAni);
-  thruster.x = 300;
+  thruster.x = 500;
   thruster.y = 530;
 
   ship = new Sprite();
   ship.img = "./assets/ships/purple_03.png";
   ship.mass = 1000;
-  ship.x = 300;
+  ship.x = 500;
   ship.y = 500;
   ship.diameter = 32;
 
@@ -137,7 +137,7 @@ function draw() {
   if (asteroidToPoint === -1) {
     ship.rotateTo(0, 100000);
     thruster.rotateTo(0, 100000);
-    thruster.x = 300;
+    thruster.x = 500;
     thruster.y = 530;
   }
   key = '';
@@ -201,10 +201,10 @@ function animateBackground() {
   starArray.forEach(star => star.display());
   planetArray.forEach(planet => planet.display());
 
-  starArray = animateComponent(starArray, bg_stars, 0.1);
-  dustArray = animateComponent(dustArray, bg_dust, 0.2);
-  nebulaArray = animateComponent(nebulaArray, bg_nebula, 0.5);
-  planetArray = animateComponent(planetArray, bg_planets, 1);
+  starArray = animateComponent(starArray, bg_stars, 0.05);
+  dustArray = animateComponent(dustArray, bg_dust, 0.1);
+  nebulaArray = animateComponent(nebulaArray, bg_nebula, 0.4);
+  planetArray = animateComponent(planetArray, bg_planets, 0.3);
 
 }
 
@@ -220,12 +220,12 @@ function animateComponent(arr, component, speed) {
   return arr;
 }
 
-function animateThrusters() {
-  if (frameCount % 5 == 0) {
-    thrusterFrameCount += 1;
-  }
-  image(thrusterArray[thrusterFrameCount % 4], shipCoords[0] + 16.5, shipCoords[1] + 41)
-}
+// function animateThrusters() {
+//   if (frameCount % 5 == 0) {
+//     thrusterFrameCount += 1;
+//   }
+//   image(thrusterArray[thrusterFrameCount % 4], shipCoords[0] + 16.5, shipCoords[1] + 41)
+// }
 
 function shipRotationCalc() {
   //find the position of asteroid based on letter typed, do math to to rotate to it
