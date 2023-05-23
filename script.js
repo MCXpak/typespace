@@ -10,7 +10,6 @@ let planetArray = [];
 let starArray = [];
 let nebulaArray = [];
 let dustArray = [];
-let wordList = ["fairy", "avenue", "complete", "bishop", "eagle", "other", "recover", "lamp", "sketch"];
 let shipCoords = [260, 450];
 let thrusterArray = [];
 let thrusterFrameCount = 0;
@@ -26,6 +25,9 @@ let asteroids;
 let thruster;
 let asteroidHitAni;
 let asteroidBaseAni;
+let gameStart = false;
+let startButton;
+let settingsButton;
 
 //Array containing live asteroids
 let asteroidArray = [];
@@ -90,6 +92,7 @@ function setup() {
   thruster.addAni(thrusterAni);
   thruster.x = 500;
   thruster.y = 530;
+  thruster.visible = false;
 
   ship = new Sprite();
   ship.img = "./assets/ships/purple_03.png";
@@ -97,6 +100,7 @@ function setup() {
   ship.x = 500;
   ship.y = 500;
   ship.diameter = 32;
+  ship.visible = false;
 
   projectiles = new Group();
   asteroids = new Group();
@@ -113,51 +117,79 @@ let keyboardKeys = document.getElementsByClassName("key nes-btn");
 //const mouseoverEvent = new Event('mouseover');
 
 document.addEventListener("keydown", (e) => {
-  checkInput(e.key, asteroidArray);
-  console.log(e.key)
+  checkInput(e.key, asteroids);
   document.getElementById(`${e.key}-key`).style.animation = "press 0.1s 1"
 })
 
 keyboardKeys.forEach( key => {
   key.addEventListener("animationend", () => {
-    console.log("ended")
     key.style.animation = ""
   })
 })
 
+function startGame(){
+  gameStart = true;
+}
+
+let titleScreen = document.getElementById('title-screen');
+
 function draw() {
   background(bg);
   animateBackground();
-  generateAsteroids();
 
-  //animateThrusters();
-  //animation(thrusterAni,ship.x,ship.y+30)
+  if(gameStart === true){
+    titleScreen.style.opacity = 0
+    titleScreen.style.pointerEvents = 'none';
 
-  //Check asteroid input
-  if (asteroidToPoint === -1) {
-    ship.rotateTo(0, 100000);
-    thruster.rotateTo(0, 100000);
-    thruster.x = 500;
-    thruster.y = 530;
+    ship.visible = true;
+    thruster.visible = true;
+    generateAsteroids();
+
+    //Check asteroid input
+    if (asteroidToPoint === -1) {
+      ship.rotateTo(0, 100000);
+      thruster.rotateTo(0, 100000);
+      thruster.x = 500;
+      thruster.y = 530;
+    }
+    key = '';
+
+    //Display currently typed characters on screen
+    displayText(stringStack);
+
+    checkProjectileCollision();
+
+    checkShipCollision();
+    ship.debug = mouse.pressing();
+    asteroids.debug = mouse.pressing();
+    
+    checkAsteroidToExplode();
   }
-  key = '';
-
-  //Display currently typed characters on screen
-  displayText(stringStack);
-
-  checkProjectileCollision();
-
-  checkShipCollision();
-  ship.debug = mouse.pressing();
-  asteroids.debug = mouse.pressing();
   
-  checkAsteroidToExplode();
   
+}
+
+function chooseWord(){
+  let skip = false
+
+  let num = Math.floor(Math.random() * wordList.length);
+
+  asteroids.forEach( (ast) => {
+    //check if first character is same
+    if(wordList[num][0] === ast.code[0]){
+      skip = true;
+      console.log(skip)
+    }
+  })
+
+  wordList.splice(num, 1);
+  return wordList[num]
+
 }
 
 function generateAsteroids() {
   if (frameCount === 10 || frameCount % 150 == 0 && wordList.length > 0) {
-    let num = Math.floor(Math.random() * wordList.length);
+    let word = chooseWord();
     //let asteroid = new Asteroid(frameCount, wordList[num]);
     let asteroid = new asteroids.Sprite();
     asteroid.id = frameCount;
@@ -165,17 +197,19 @@ function generateAsteroids() {
     asteroid.diameter = 25;
     asteroid.mass = 10000;
     asteroid.frameDelay = 10;
-    asteroid.x = Math.floor(Math.random() * 600) + 20;
+    asteroid.x = Math.floor(Math.random() * 1000) + 20;
     asteroid.y = Math.floor(Math.random() * 200) + 0;
-    asteroid.code = wordList[num];
-    asteroid.text = wordList[num];
-    asteroid.health = wordList[num].length;
-    asteroid.pseudoHealth = wordList[num].length;
-    asteroid.maxHealth = wordList[num].length;
+    asteroid.rotate(200, 0.1);
+    asteroid.code = word;
+    asteroid.text = word;
+    asteroid.health = word.length;
+    asteroid.pseudoHealth = word.length;
+    asteroid.maxHealth = word.length;
     asteroid.textColor = "#009699";
     asteroid.textSize = 30;
     asteroid.moveTowards(ship, 0.001);
-    wordList.splice(num, 1);
+    asteroids.forEach( ast => console.log(ast.code))
+    
     //asteroid.p5Image = loadImage(Asteroid.image, 200, 50);
     asteroidArray.push(asteroid);
   }
@@ -250,13 +284,6 @@ class BackgroundComponent {
     this.delta += this.speed;
     image(this.component, 0, this.delta);
   }
-}
-
-function animateTitle() {
-  let omega = 0.5 + Math.abs(Math.sin(frameCount * 0.01)) / 20;
-  scale(omega);
-  translate(-40, 100);
-  image(title, (430 - (430 * omega)), (44 - (44 - omega)));
 }
 
 class Text {

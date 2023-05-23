@@ -1,7 +1,10 @@
 #defaultCanvas0 {
     position: absolute;
-    left: 25%;
-    top: 100px;
+    z-index: -1;
+    left:        50%;        /* Start with top left in the center */
+    top:         50%;
+    margin-left: -500px;     /* Shift over half the width */
+    margin-top:  -500px;      /* Shift up half the height */
 }
 
 #p5play-intro {
@@ -12,6 +15,29 @@
     background-color: #0B3948;
 }
 
+#title-screen{
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    z-index: 1;
+    background: none;
+    left:        50%;        /* Start with top left in the center */
+    top:         50%;
+    width:       200px;      /* The fixed width... */
+    height:      100px;      /* ...and height */
+    margin-left: -100px;     /* Shift over half the width */
+    margin-top:  -300px;      /* Shift up half the height */
+}
+
+.titleButtons{
+    border: none;
+    background: none;
+}
+
+#title-screen-img{
+    background: none;
+    scale: 2;
+}
 
 body * {
     margin: 0;
@@ -40,6 +66,11 @@ body * {
     align-self: center;
     justify-self: center;
     text-shadow: 3px 5px 7px #171717;
+}
+
+.nav-links:hover{
+    text-decoration: none;
+    color: #adafbc;
 }
 
 #about-link{
