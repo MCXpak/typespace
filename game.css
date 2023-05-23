@@ -113,6 +113,7 @@ body * {
 
 .delete {
     grid-column: span 4;
+    font-size: 13px;
 }
 
 .tab {
@@ -125,10 +126,12 @@ body * {
 
 .capslock {
     grid-column: span 4;
+    font-size: 15px;
 }
 
 .return {
     grid-column: span 4;
+    font-size: 13px;
 }
 
 .leftshift {
@@ -137,17 +140,35 @@ body * {
 
 .rightshift {
     grid-column: span 5;
+    
 }
 
 .leftctrl {
     grid-column: span 3;
+    font-size: 12px;
+}
+
+.rightctrl{
+    font-size: 9px;
+    justify-self: left;
+    max-width: 50px;
+}
+
+#alt-key {
+    font-size: 9px;
+    justify-self: center;
 }
 
 .command {
     grid-column: span 3;
-    font-size: 14px;
+    font-size: 12px;
+    
 }
 
 .space {
     grid-column: span 13;
+}
+
+#fn-key {
+    font-size: 11px;
 }
