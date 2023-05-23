@@ -4,6 +4,10 @@
     top: 100px;
 }
 
+#p5play-intro {
+    opacity: 0;
+}
+
 *{
     background-color: black;
 }
