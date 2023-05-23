@@ -3,6 +3,10 @@ let bg_stars;
 let bg_dust;
 let bg_nebula;
 let bg_planets;
+let bg_stars_2;
+let bg_dust_2;
+let bg_nebula_2;
+let bg_planets_2;
 let title;
 let start;
 let ship;
@@ -28,6 +32,7 @@ let asteroidBaseAni;
 let gameStart = false;
 let startButton;
 let settingsButton;
+let score = 0;
 
 //Array containing live asteroids
 let asteroidArray = [];
@@ -52,6 +57,13 @@ function setup() {
   bg_dust = loadImage("./assets/background/space_dust.png", 0, 0);
   bg_nebula = loadImage("./assets/background/space_nebula.png", 0, 0);
   bg_planets = loadImage("./assets/background/space_planets.png", 0, 0);
+
+  bg_2 = loadImage("./assets/background/space_background_2.png", 0, 0);
+  bg_stars_2 = loadImage("./assets/background/space_stars_2.png", 0, 0);
+  bg_dust_2 = loadImage("./assets/background/space_dust_2.png", 0, 0);
+  bg_nebula_2 = loadImage("./assets/background/space_nebula_2.png", 0, 0);
+  bg_planets_2 = loadImage("./assets/background/space_planets_2.png", 0, 0);
+
   start = loadImage("./assets/start.png");
   title = loadImage("./assets/typespace.png");
 
@@ -134,7 +146,7 @@ function startGame(){
 let titleScreen = document.getElementById('title-screen');
 
 function draw() {
-  background(bg);
+  background(score < 2 ? bg : bg_2);
   animateBackground();
 
   if(gameStart === true){
@@ -235,10 +247,19 @@ function animateBackground() {
   starArray.forEach(star => star.display());
   planetArray.forEach(planet => planet.display());
 
-  starArray = animateComponent(starArray, bg_stars, 0.05);
-  dustArray = animateComponent(dustArray, bg_dust, 0.1);
-  nebulaArray = animateComponent(nebulaArray, bg_nebula, 0.4);
-  planetArray = animateComponent(planetArray, bg_planets, 0.3);
+  if(score > 2){
+    starArray = animateComponent(starArray, bg_stars_2, 0.05);
+    dustArray = animateComponent(dustArray, bg_dust_2, 0.1);
+    nebulaArray = animateComponent(nebulaArray, bg_nebula_2, 0.4);
+    planetArray = animateComponent(planetArray, bg_planets_2, 0.3);
+  } else {
+    starArray = animateComponent(starArray, bg_stars, 0.05);
+    dustArray = animateComponent(dustArray, bg_dust, 0.1);
+    nebulaArray = animateComponent(nebulaArray, bg_nebula, 0.4);
+    planetArray = animateComponent(planetArray, bg_planets, 0.3);
+  }
+
+  
 
 }
 
@@ -348,12 +369,6 @@ function checkProjectileCollision() {
         proj.remove();
         ast.ani = ['hit', 'base'];
       }
-      if (ast.health <= 0){
-        // ast.changeAni('explode');
-        // console.log(ast.ani.name);
-        // ast.ani.loop();
-        //ast.remove();
-      }
     })
   })
 }
@@ -365,6 +380,8 @@ function checkAsteroidToExplode(){
       ast.ani = 'explode';
       if(ast.ani.lastFrame === ast.ani.frame){
         ast.remove();
+        console.log(score)
+        score += 1;
       }
       //ast.ani.onComplete = ast.remove();
       //console.log(ast.ani.onComplete);
