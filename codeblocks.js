@@ -251,6 +251,8 @@ function checkInput(char, asteroidArray){
     if(char == "Backspace"){
         stringStack.pop();
         console.log(stringStack);
+    if(char == "Shift" || char == "Control"){
+        console.log(`pressed ${char}`);
     } else {
         stringStack.push(char);
         asteroidArray.forEach( (asteroid, index) => {
