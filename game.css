@@ -107,6 +107,21 @@ body * {
     grid-gap: 10px;
 }
 
+#output {
+    background-color: white;
+    position: absolute;
+    left: 50%; 
+    top: 50%;
+    margin-left: -200px;    
+    margin-top: 185px;
+    border-radius: 10px;
+    min-width: 400px;
+    min-height: 50px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 50px;
+}
+
 @media (-webkit-min-device-pixel-ratio: 0) and (min-resolution: 0.001dpcm){
     .key.nes-btn {
         border-image-repeat: stretch;

@@ -139,6 +139,8 @@ keyboardKeys.forEach( key => {
   })
 })
 
+let output = document.getElementById("output")
+
 function startGame(){
   gameStart = true;
 }
@@ -146,7 +148,7 @@ function startGame(){
 let titleScreen = document.getElementById('title-screen');
 
 function draw() {
-  background(score < 2 ? bg : bg_2);
+  background(bg);
   animateBackground();
 
   if(gameStart === true){
@@ -167,7 +169,7 @@ function draw() {
     key = '';
 
     //Display currently typed characters on screen
-    displayText(stringStack);
+    output.textContent = stringStack.join("");
 
     checkProjectileCollision();
 
@@ -247,19 +249,10 @@ function animateBackground() {
   starArray.forEach(star => star.display());
   planetArray.forEach(planet => planet.display());
 
-  if(score > 2){
-    starArray = animateComponent(starArray, bg_stars_2, 0.05);
-    dustArray = animateComponent(dustArray, bg_dust_2, 0.1);
-    nebulaArray = animateComponent(nebulaArray, bg_nebula_2, 0.4);
-    planetArray = animateComponent(planetArray, bg_planets_2, 0.3);
-  } else {
-    starArray = animateComponent(starArray, bg_stars, 0.05);
-    dustArray = animateComponent(dustArray, bg_dust, 0.1);
-    nebulaArray = animateComponent(nebulaArray, bg_nebula, 0.4);
-    planetArray = animateComponent(planetArray, bg_planets, 0.3);
-  }
-
-  
+  starArray = animateComponent(starArray, bg_stars, 0.05);
+  dustArray = animateComponent(dustArray, bg_dust, 0.1);
+  nebulaArray = animateComponent(nebulaArray, bg_nebula, 0.4);
+  planetArray = animateComponent(planetArray, bg_planets, 0.3);
 
 }
 
