@@ -147,12 +147,15 @@ function startGame(){
 }
 
 let titleScreen = document.getElementById('title-screen');
+let gameOver = document.getElementById('game-over');
 
 function draw() {
   background(bg);
   animateBackground();
 
   if(gameStart === true){
+    gameOver.style.opacity = 0;
+    gameOver.style.pointerEvents = 'none';
     titleScreen.style.opacity = 0
     titleScreen.style.pointerEvents = 'none';
 
@@ -175,8 +178,6 @@ function draw() {
     checkProjectileCollision();
 
     checkShipCollision();
-    ship.debug = mouse.pressing();
-    asteroids.debug = mouse.pressing();
     
     checkAsteroidToExplode();
   }
@@ -384,14 +385,18 @@ function checkAsteroidToExplode(){
   })
 }
 
-function checkShipCollision() {
-  asteroidArray.forEach(ast => {
-    let minDistance = 100;
-    let distanceVector = p5.Vector.sub(ast.position, ship.position);
-    let distanceVectorMag = distanceVector.mag();
-    if (distanceVectorMag < minDistance) {
-    }
-  })
+function checkShipCollision(){
+  if(asteroids.collides(ship)){
+    console.log("game over");
+    gameStart = false;
+    asteroids.forEach( ast => {
+      ast.remove();
+    })
+    ship.remove();
+    thruster.remove();
+    gameOver.style.opacity = 1;
+    gameOver.style.pointerEvents = 'auto';
+  }
 
 }
 
