@@ -212,6 +212,7 @@ function generateAsteroids() {
     asteroid.img = "./assets/asteroid/asteroid-base.png";
     asteroid.diameter = 25;
     asteroid.mass = 10000;
+    asteroid.scale = 1 + word.length/10
     asteroid.frameDelay = 10;
     asteroid.x = Math.floor(Math.random() * 1000) + 20;
     asteroid.y = Math.floor(Math.random() * 200) + 0;
