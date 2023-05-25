@@ -107,6 +107,22 @@ body * {
     grid-gap: 10px;
 }
 
+#score {
+    color: white;
+    background: none;
+    position: absolute;
+    left: 50%; 
+    top: 50%;
+    margin-left: -470px;    
+    margin-top: 115px;
+    border-radius: 10px;
+    min-width: 50px;
+    min-height: 50px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 50px;
+}
+
 #output {
     background-color: white;
     position: absolute;

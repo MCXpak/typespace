@@ -139,7 +139,8 @@ keyboardKeys.forEach( key => {
   })
 })
 
-let output = document.getElementById("output")
+let output = document.getElementById("output");
+let scoreDiv = document.getElementById("score");
 
 function startGame(){
   gameStart = true;
@@ -375,6 +376,7 @@ function checkAsteroidToExplode(){
         ast.remove();
         console.log(score)
         score += 1;
+        scoreDiv.textContent = `Score: ${score}`
       }
       //ast.ani.onComplete = ast.remove();
       //console.log(ast.ani.onComplete);
