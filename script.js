@@ -210,7 +210,7 @@ function generateAsteroids() {
     if(score > 10 && randNum === 100){
         word = `function ${word}(int){};`
     } else if(score > 5){
-      if(randNum === 2){
+      if(randNum % 2 === 0){
         word += "();";
       }
       
