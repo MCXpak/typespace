@@ -205,13 +205,11 @@ function chooseWord(){
 
 function generateAsteroids() {
   if (frameCount === 10 || frameCount % 150 == 0 && wordList.length > 0) {
-    let randNum = Math.floor(Math.random() * (3 - 0 + 1) + 0)
+    let randNum = Math.floor(Math.random() * (100 - 0 + 1) + 0)
     let word = chooseWord();
-    if(score > 15){
-      if(randNum === 2){
+    if(score > 10 && randNum === 100){
         word = `function ${word}(int){};`
-      }
-    } else if(score > 10){
+    } else if(score > 5){
       if(randNum === 2){
         word += "();";
       }
