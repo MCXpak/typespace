@@ -404,7 +404,7 @@ function checkShipCollision(){
     })
     ship.remove();
     thruster.remove();
-    gameOver.style.opacity = 1;
+    gameOver.style.display = 'block';
     gameOver.style.pointerEvents = 'auto';
   }
 
