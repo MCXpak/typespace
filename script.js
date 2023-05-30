@@ -186,17 +186,12 @@ function draw() {
 }
 
 function chooseWord(){
-  let skip = false
-
   let num = Math.floor(Math.random() * wordList.length);
-
-  asteroids.forEach( (ast) => {
-    //check if first character is same
-    if(wordList[num][0] === ast.code[0]){
-      skip = true;
-      console.log(skip)
-    }
-  })
+  let firstLetterList = asteroids.map( ast => ast[0])
+  
+  while(firstLetterList.includes(wordList[num][0])){
+    num = Math.floor(Math.random() * wordList.length);
+  }
 
   wordList.splice(num, 1);
   return wordList[num]
