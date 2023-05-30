@@ -33,6 +33,7 @@ let gameStart = false;
 let startButton;
 let settingsButton;
 let score = 0;
+let textDict = {};
 
 //Array containing live asteroids
 let asteroidArray = [];
@@ -161,7 +162,9 @@ function draw() {
 
     ship.visible = true;
     thruster.visible = true;
+    asteroids.forEach( ast => textDict[ast.id].display(ast.position));
     generateAsteroids();
+    
 
     //Check asteroid input
     if (asteroidToPoint === -1) {
@@ -180,6 +183,7 @@ function draw() {
     checkShipCollision();
     
     checkAsteroidToExplode();
+    
   }
   
   
@@ -222,14 +226,19 @@ function generateAsteroids() {
     asteroid.y = Math.floor(Math.random() * 200) + 0;
     asteroid.rotate(200, 0.1);
     asteroid.code = word;
-    asteroid.text = word;
+    let text = new Text(asteroid.id, word, asteroid.x, asteroid.y);
+    textDict[asteroid.id] = text;
+    console.log(textDict);
+    //asteroid.text = word;
+    asteroid.stroke = 'red';
+    asteroid.strokeWeight  = 10;
     asteroid.health = word.length;
     asteroid.pseudoHealth = word.length;
     asteroid.maxHealth = word.length;
     asteroid.textColor = "#009699";
     asteroid.textSize = 30;
     asteroid.moveTowards(ship, 0.001);
-    asteroids.forEach( ast => console.log(ast.code))
+    console.log(asteroid)
     
     //asteroid.p5Image = loadImage(Asteroid.image, 200, 50);
     asteroidArray.push(asteroid);
@@ -275,13 +284,6 @@ function animateComponent(arr, component, speed) {
   return arr;
 }
 
-// function animateThrusters() {
-//   if (frameCount % 5 == 0) {
-//     thrusterFrameCount += 1;
-//   }
-//   image(thrusterArray[thrusterFrameCount % 4], shipCoords[0] + 16.5, shipCoords[1] + 41)
-// }
-
 function shipRotationCalc() {
   //find the position of asteroid based on letter typed, do math to to rotate to it
   if (asteroidToPoint === -1) {
@@ -313,27 +315,31 @@ class Text {
     this.code = code;
     this.x = x
     this.y = y
+    this.w = textWidth(code);
   }
 
   static image = "./assets/asteroid/asteroid-base.png";
 
-  display() {
-    textSize(32);
-    fill(0, 150, 153);
-    text(this.code, this.x + ((96 * 1.5) / 2 - 30), this.y + ((96 * 1.5) / 2 + 15));
+  display(pos) {
+    textSize(12);
+    noStroke();
+    fill(0);
+    rect(10, 10, this.w, 12);
+    fill(255);
+    text(this.code, pos.x, pos.y);
   }
 
-  animateAsteroidExplosion() {
-    if (frameCount % 5 == 0) {
-      asteroidFrameCount += 1;
-    }
-    if (asteroidFrameCount < 7) {
-      image(asteroidExplosionArray[asteroidFrameCount], this.position.x, this.position.y, 96 * 1.5, 96 * 1.5);
-    } else {
-      asteroidArray = asteroidArray.filter((ast) => ast.id !== this.id);
-      asteroidFrameCount = 0;
-    }
-  }
+  // animateAsteroidExplosion() {
+  //   if (frameCount % 5 == 0) {
+  //     asteroidFrameCount += 1;
+  //   }
+  //   if (asteroidFrameCount < 7) {
+  //     image(asteroidExplosionArray[asteroidFrameCount], this.position.x, this.position.y, 96 * 1.5, 96 * 1.5);
+  //   } else {
+  //     asteroidArray = asteroidArray.filter((ast) => ast.id !== this.id);
+  //     asteroidFrameCount = 0;
+  //   }
+  // }
 }
 
 function fireProjectile(astCoords, astId) {
