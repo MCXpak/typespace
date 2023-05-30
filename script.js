@@ -154,7 +154,7 @@ function draw() {
   animateBackground();
 
   if(gameStart === true){
-    gameOver.style.opacity = 0;
+    gameOver.style.display = 'none';
     gameOver.style.pointerEvents = 'none';
     titleScreen.style.opacity = 0
     titleScreen.style.pointerEvents = 'none';
@@ -399,7 +399,7 @@ function checkShipCollision(){
     })
     ship.remove();
     thruster.remove();
-    gameOver.style.display = 'block';
+    gameOver.style.display = 'inline';
     gameOver.style.pointerEvents = 'auto';
   }
 
