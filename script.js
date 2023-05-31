@@ -27,6 +27,7 @@ let stringStack = [];
 let projectiles;
 let asteroids;
 let thruster;
+let texts;
 let asteroidHitAni;
 let asteroidBaseAni;
 let gameStart = false;
@@ -116,6 +117,7 @@ function setup() {
   ship.visible = false;
 
   projectiles = new Group();
+  texts = new Group();
   asteroids = new Group();
   asteroids.addAni('explode', asteroidExplosionAni)
   asteroids.addAni('base', asteroidBaseAni);
@@ -124,6 +126,9 @@ function setup() {
   projectiles.overlaps(projectiles);
   projectiles.overlaps(ship);
   ship.overlaps(thruster);
+  texts.overlaps(asteroids);
+  texts.overlaps(ship);
+  texts.overlaps(projectiles);
 }
 
 let keyboardKeys = document.getElementsByClassName("key nes-btn");
@@ -131,7 +136,11 @@ let keyboardKeys = document.getElementsByClassName("key nes-btn");
 
 document.addEventListener("keydown", (e) => {
   checkInput(e.key, asteroids);
-  document.getElementById(`${e.key}-key`).style.animation = "press 0.1s 1"
+  try{
+    document.getElementById(`${e.key}-key`).style.animation = "press 0.1s 1";
+  } catch(e) {
+  }
+  
 })
 
 keyboardKeys.forEach( key => {
@@ -159,10 +168,16 @@ function draw() {
     gameOver.style.pointerEvents = 'none';
     titleScreen.style.opacity = 0
     titleScreen.style.pointerEvents = 'none';
-
     ship.visible = true;
     thruster.visible = true;
-    asteroids.forEach( ast => textDict[ast.id].display(ast.position));
+    //asteroids.forEach( ast => textDict[ast.id].display(ast.position));
+    asteroids.forEach( ast => {
+      texts.forEach( text => {
+        if(text.id === ast.id){
+          text.position = ast.position;
+        }
+      })
+    })
     generateAsteroids();
     
 
@@ -191,8 +206,9 @@ function draw() {
 
 function chooseWord(){
   let num = Math.floor(Math.random() * wordList.length);
-  let firstLetterList = asteroids.map( ast => ast[0])
-  
+  let firstLetterList = []
+  asteroids.forEach( ast => firstLetterList.push(ast.code[0]))
+
   while(firstLetterList.includes(wordList[num][0])){
     num = Math.floor(Math.random() * wordList.length);
   }
@@ -226,10 +242,7 @@ function generateAsteroids() {
     asteroid.y = Math.floor(Math.random() * 200) + 0;
     asteroid.rotate(200, 0.1);
     asteroid.code = word;
-    let text = new Text(asteroid.id, word, asteroid.x, asteroid.y);
-    textDict[asteroid.id] = text;
-    console.log(textDict);
-    //asteroid.text = word;
+    generateText(asteroid.id, word, asteroid.position);
     asteroid.stroke = 'red';
     asteroid.strokeWeight  = 10;
     asteroid.health = word.length;
@@ -238,10 +251,10 @@ function generateAsteroids() {
     asteroid.textColor = "#009699";
     asteroid.textSize = 30;
     asteroid.moveTowards(ship, 0.001);
-    console.log(asteroid)
     
     //asteroid.p5Image = loadImage(Asteroid.image, 200, 50);
     asteroidArray.push(asteroid);
+    console.log(asteroids);
   }
 }
 
@@ -309,6 +322,18 @@ class BackgroundComponent {
   }
 }
 
+function generateText(id, code, pos){
+  let text = new texts.Sprite();
+  text.id = id;
+  text.position = pos;
+  text.text = code;
+  text.color = '#a1a1a1';
+  text.textSize = 30;
+  text.height = 27;
+  textSize(30);
+  text.width = textWidth(code)+10;
+}
+
 class Text {
   constructor(id, code, x, y) {
     this.id = id;
@@ -317,8 +342,6 @@ class Text {
     this.y = y
     this.w = textWidth(code);
   }
-
-  static image = "./assets/asteroid/asteroid-base.png";
 
   display(pos) {
     textSize(12);
@@ -384,9 +407,13 @@ function checkAsteroidToExplode(){
     if(ast.health <= 0){
       ast.text = ''
       ast.ani = 'explode';
+      texts.forEach( text => {
+        if(text.id === ast.id){
+          text.remove();
+        }
+      })
       if(ast.ani.lastFrame === ast.ani.frame){
         ast.remove();
-        console.log(score)
         score += 1;
         scoreDiv.textContent = `Score: ${score}`
       }
@@ -403,6 +430,8 @@ function checkShipCollision(){
     asteroids.forEach( ast => {
       ast.remove();
     })
+    console.log(asteroids);
+    texts.forEach( text => text.remove() )
     ship.remove();
     thruster.remove();
     gameOver.style.display = 'inline';
