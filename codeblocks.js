@@ -250,7 +250,6 @@ function checkInput(char, asteroidArray){
     let currentAstPointAt = asteroidToPoint;
     if(char == "Backspace"){
         stringStack.pop();
-        console.log(stringStack);
     }
     if(char && !(["Shift", "Control", "CapsLock", "Tab", "Backspace"].includes(char))){
         stringStack.push(char);

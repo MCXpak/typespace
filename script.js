@@ -254,7 +254,6 @@ function generateAsteroids() {
     
     //asteroid.p5Image = loadImage(Asteroid.image, 200, 50);
     asteroidArray.push(asteroid);
-    console.log(asteroids);
   }
 }
 
@@ -427,11 +426,16 @@ function checkShipCollision(){
   if(asteroids.collides(ship)){
     console.log("game over");
     gameStart = false;
-    asteroids.forEach( ast => {
-      ast.remove();
-    })
-    console.log(asteroids);
-    texts.forEach( text => text.remove() )
+    console.log(asteroids.length)
+    let asteroidsLen = asteroids.length
+    let textsLen = texts.length
+    for(let i = 0; i < asteroidsLen; i++){
+      asteroids[0].remove();
+    }
+    for(let i = 0; i < textsLen; i++){
+      texts[0].remove();
+    }
+    asteroidArray = []
     ship.remove();
     thruster.remove();
     gameOver.style.display = 'inline';
