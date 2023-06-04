@@ -73,13 +73,6 @@ function setup() {
   nebulaArray.push(new BackgroundComponent(bg_nebula, -400, 0.4));
   starArray.push(new BackgroundComponent(bg_stars, -400, 0.05));
   planetArray.push(new BackgroundComponent(bg_planets, -400, 0.3));
-  
-  let thrusterAni = loadAnimation(
-    './assets/thrusters/vertical-thrust-01.png',
-    './assets/thrusters/vertical-thrust-02.png',
-    './assets/thrusters/vertical-thrust-03.png',
-    './assets/thrusters/vertical-thrust-04.png'
-  );
 
   asteroidBaseAni = loadAnimation(
     './assets/asteroid/asteroid-base.png'
@@ -101,6 +94,28 @@ function setup() {
     './assets/asteroid/asteroid-explode-07.png',
   )
 
+  projectiles = new Group();
+  texts = new Group();
+  asteroids = new Group();
+  asteroids.addAni('explode', asteroidExplosionAni)
+  asteroids.addAni('base', asteroidBaseAni);
+  asteroids.addAni('hit', asteroidHitAni);
+
+  projectiles.overlaps(projectiles);
+  texts.overlaps(asteroids);
+  texts.overlaps(projectiles);
+
+  generateShip();
+}
+
+function generateShip(){
+  let thrusterAni = loadAnimation(
+    './assets/thrusters/vertical-thrust-01.png',
+    './assets/thrusters/vertical-thrust-02.png',
+    './assets/thrusters/vertical-thrust-03.png',
+    './assets/thrusters/vertical-thrust-04.png'
+  );
+
   thrusterAni.frameDelay = 5;
   thruster = new Sprite();
   thruster.addAni(thrusterAni);
@@ -116,19 +131,9 @@ function setup() {
   ship.diameter = 32;
   ship.visible = false;
 
-  projectiles = new Group();
-  texts = new Group();
-  asteroids = new Group();
-  asteroids.addAni('explode', asteroidExplosionAni)
-  asteroids.addAni('base', asteroidBaseAni);
-  asteroids.addAni('hit', asteroidHitAni);
-
-  projectiles.overlaps(projectiles);
-  projectiles.overlaps(ship);
   ship.overlaps(thruster);
-  texts.overlaps(asteroids);
+  projectiles.overlaps(ship);
   texts.overlaps(ship);
-  texts.overlaps(projectiles);
 }
 
 let keyboardKeys = document.getElementsByClassName("key nes-btn");
@@ -153,7 +158,9 @@ let output = document.getElementById("output");
 let scoreDiv = document.getElementById("score");
 
 function startGame(){
+  score = 0;
   gameStart = true;
+  generateShip();
 }
 
 let titleScreen = document.getElementById('title-screen');
