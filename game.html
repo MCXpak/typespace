@@ -5,9 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>typespace</title>
-    <link rel="stylesheet" href="game.css">
     <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
     <link href="https://unpkg.com/nes.css/css/nes.css" rel="stylesheet" />
+    <link rel="stylesheet" href="game.css">
 </head>
 <body>
     <nav id="nav">
@@ -23,8 +23,8 @@
         <button class="nav-links titleButtons" >settings</button>
     </div>
     <div id="game-over">
-        GAME OVER
-        <button class="nav-links titleButtons" onclick="startGame()">play again</button>
+        <div id="game-over-text">GAME OVER</div>
+        <button id="play-again" class="nav-links titleButtons" onclick="startGame()">play again</button>
     </div>
     <div id="score">Score : 0</div>
     <div id="output"></div>

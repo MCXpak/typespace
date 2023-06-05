@@ -105,10 +105,6 @@ function setup() {
   texts.overlaps(asteroids);
   texts.overlaps(projectiles);
 
-  generateShip();
-}
-
-function generateShip(){
   let thrusterAni = loadAnimation(
     './assets/thrusters/vertical-thrust-01.png',
     './assets/thrusters/vertical-thrust-02.png',
@@ -130,10 +126,25 @@ function generateShip(){
   ship.y = 500;
   ship.diameter = 32;
   ship.visible = false;
-
-  ship.overlaps(thruster);
+  
   projectiles.overlaps(ship);
   texts.overlaps(ship);
+  ship.overlaps(thruster);
+  thruster.overlaps(projectiles);
+
+  // document.getElementById('defaultCanvas0').style.height = "1080px";
+  // document.getElementById('defaultCanvas0').style.width = "1920px";
+
+}
+
+function showShip(){
+  ship.visible = true;
+  thruster.visible = true;
+  ship.x = 500;
+  ship.y = 500;
+  ship.velocity = createVector(0,0);
+  console.log(ship.velocity);
+  console.log(ship);
 }
 
 let keyboardKeys = document.getElementsByClassName("key nes-btn");
@@ -160,7 +171,7 @@ let scoreDiv = document.getElementById("score");
 function startGame(){
   score = 0;
   gameStart = true;
-  generateShip();
+  showShip();
 }
 
 let titleScreen = document.getElementById('title-screen');
@@ -443,8 +454,8 @@ function checkShipCollision(){
       texts[0].remove();
     }
     asteroidArray = []
-    ship.remove();
-    thruster.remove();
+    ship.visible = false;
+    thruster.visible = false;
     gameOver.style.display = 'inline';
     gameOver.style.pointerEvents = 'auto';
   }
