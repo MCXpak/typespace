@@ -6,7 +6,8 @@
     margin-left: -500px;    
     margin-top: -430px;  
     border-radius: 30px;  
-    border: 1px solid black;  
+    border: 1px solid black;
+    box-shadow: 3px 5px 7px #171717; 
 }
 
 #p5play-intro {
@@ -15,10 +16,20 @@
 
 *{
     background-color: #0B3948;
+    background-image: url('./assets/background/space_stars.png');
+    background-size: cover;
 }
 
 body {
     background-color: #0B3948;
+    z-index: 1;
+    
+}
+
+main {
+    min-height: fit-content;
+    min-width: fit-content;
+    
 }
 
 #title-screen{
@@ -140,17 +151,19 @@ body * {
 
 .keyboard-base {
     max-width: max-content;
-    padding: 20px;
+    padding: 15px;
     position: absolute;
     top: 83%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: rgb(197, 197, 197);
+    background-color: #50c2e9;
     border-radius: 10px;
     display: grid;
-    grid-template-columns: repeat(30, 15px);
+    grid-template-columns: repeat(30, 16px);
     grid-template-rows: repeat(5, 40px);
     grid-gap: 10px;
+    box-shadow: 3px 5px 7px #171717;
+
 }
 
 #score {
@@ -195,14 +208,53 @@ body * {
 }
 
 .key {
-    /* /* background-color: rgb(243, 243, 243); */
-    /* border: 2px solid black; */
-    /* border-radius: 5px; */
     grid-column: span 2;
-    /* font-size: 20px; */
     text-align: center;
     padding: 0;
-    /* padding-top: 17px;  */
+}
+
+.index {
+    background-color: #cce4db;
+}
+
+.middle {
+    background-color: #f3bccc;
+}
+
+.ring {
+    background-color: #eb7777;
+}
+
+.pinky{
+    background-color: #ffc97e;
+}
+
+.thumb{
+    background-color: #82bbeb;
+}
+
+.nes-btn::after {
+    box-shadow: none;
+}
+
+.pinky::after {
+    box-shadow: inset -4px -4px #c89956;
+}
+
+.ring::after {
+    box-shadow: inset -4px -4px #b14e4e;
+}
+
+.middle::after {
+    box-shadow: inset -4px -4px #b47d8c;
+}
+
+.index::after {
+    box-shadow: inset -4px -4px #7d9e92;
+}
+
+.thumb::after {
+    box-shadow: inset -4px -4px #5180a7;
 }
 
 @keyframes press {
@@ -268,7 +320,12 @@ body * {
     max-width: 50px;
 }
 
-#alt-key {
+#left-alt-key {
+    font-size: 9px;
+    justify-self: center;
+}
+
+#right-alt-key {
     font-size: 9px;
     justify-self: center;
 }
