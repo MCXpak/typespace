@@ -156,7 +156,7 @@ body * {
     top: 83%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #50c2e9;
+    background-color: #3e849c;
     border-radius: 10px;
     display: grid;
     grid-template-columns: repeat(30, 16px);
