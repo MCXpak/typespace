@@ -179,7 +179,7 @@ let gameOver = document.getElementById('game-over');
 
 function draw() {
   background(bg);
-  animateBackground();
+  //animateBackground();
 
   if(gameStart === true){
     gameOver.style.display = 'none';
