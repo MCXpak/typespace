@@ -31,10 +31,13 @@ let texts;
 let asteroidHitAni;
 let asteroidBaseAni;
 let gameStart = false;
+let tutorial = false;
 let startButton;
 let settingsButton;
 let score = 0;
 let textDict = {};
+let defaultFont;
+let TwoPFont;
 
 //Array containing live asteroids
 let asteroidArray = [];
@@ -49,6 +52,7 @@ function preload() {
     asteroidExplosionArray.push(loadImage(`./assets/asteroid/asteroid-explode-0${i + 1}.png`));
   }
 
+  TwoPFont = loadFont("./assets/font/PressStart2P-Regular.ttf");
 }
 
 function setup() {
@@ -134,7 +138,7 @@ function setup() {
 
   // document.getElementById('defaultCanvas0').style.height = "1080px";
   // document.getElementById('defaultCanvas0').style.width = "1920px";
-
+  defaultFont = textFont();
 }
 
 function showShip(){
@@ -170,7 +174,7 @@ let scoreDiv = document.getElementById("score");
 
 function startGame(){
   score = 0;
-  gameStart = true;
+  tutorial = true;
   showShip();
 }
 
@@ -179,9 +183,28 @@ let gameOver = document.getElementById('game-over');
 
 function draw() {
   background(bg);
-  //animateBackground();
+  animateBackground();
 
-  if(gameStart === true){
+  if(tutorial){
+    background('black');
+    gameOver.style.display = 'none';
+    gameOver.style.pointerEvents = 'none';
+    titleScreen.style.opacity = 0
+    titleScreen.style.pointerEvents = 'none';
+    ship.visible = true;
+    thruster.visible = true;
+
+    fill(255,255,255)
+    textSize(18);
+    textFont(TwoPFont);
+    text("type to destroy asteroid", 300, 290);
+    textFont(defaultFont);
+    
+    createAsteroid();
+
+  }
+
+  if(gameStart){
     gameOver.style.display = 'none';
     gameOver.style.pointerEvents = 'none';
     titleScreen.style.opacity = 0
@@ -198,7 +221,6 @@ function draw() {
     })
     generateAsteroids();
     
-
     //Check asteroid input
     if (asteroidToPoint === -1) {
       ship.rotateTo(0, 100000);
@@ -207,19 +229,44 @@ function draw() {
       thruster.y = 530;
     }
     key = '';
-
-    //Display currently typed characters on screen
-    output.textContent = stringStack.join("");
-
-    checkProjectileCollision();
-
-    checkShipCollision();
-    
-    checkAsteroidToExplode();
-    
   }
+
+  output.textContent = stringStack.join("");
+
+  checkProjectileCollision();
+
+  checkShipCollision();
   
+  checkAsteroidToExplode();
   
+}
+
+function createAsteroid(){
+  if(asteroids.length <= 0){
+    let asteroid = new asteroids.Sprite();
+    asteroid.id = frameCount;
+    asteroid.img = "./assets/asteroid/asteroid-base.png";
+    asteroid.diameter = 25;
+    asteroid.mass = 10000;
+    asteroid.scale = 1 + "typespace".length/10
+    asteroid.frameDelay = 10;
+    asteroid.x = 510;
+    asteroid.y = 100;
+    //asteroid.rotate(200, 0.1);
+    asteroid.code = "typespace";
+    generateText(asteroid.id, "typespace", asteroid.position);
+    asteroid.stroke = 'red';
+    asteroid.strokeWeight  = 10;
+    asteroid.health = "typespace".length;
+    asteroid.pseudoHealth = "typespace".length;
+    asteroid.maxHealth = "typespace".length;
+    asteroid.textColor = "#009699";
+    asteroid.textSize = 30;
+    
+    //asteroid.p5Image = loadImage(Asteroid.image, 200, 50);
+    asteroidArray.push(asteroid);
+    console.log(asteroid)
+  }
 }
 
 function chooseWord(){
@@ -243,8 +290,11 @@ function generateAsteroids() {
     if(score > 10 && randNum === 100){
         word = `function ${word}(int){};`
     } else if(score > 5){
-      if(randNum % 2 === 0){
+      if(randNum % 4 === 0){
         word += "();";
+      }
+      else if(randNum % 7 === 0){
+        word += ('_' + chooseWord());
       }
       
     }
@@ -346,7 +396,7 @@ function generateText(id, code, pos){
   text.text = code;
   text.color = '#a1a1a1';
   text.textSize = 30;
-  text.height = 27;
+  text.height = 32;
   textSize(30);
   text.width = textWidth(code)+10;
 }
@@ -433,6 +483,8 @@ function checkAsteroidToExplode(){
         ast.remove();
         score += 1;
         scoreDiv.textContent = `Score: ${score}`
+        tutorial = false;
+        gameStart = true;
       }
       //ast.ani.onComplete = ast.remove();
       //console.log(ast.ani.onComplete);
