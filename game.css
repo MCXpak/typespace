@@ -149,6 +149,61 @@ body * {
     grid-column-start: 8;
 }
 
+#legend{
+    background-color: #3e849c;
+    background-image: none;
+    position: absolute;
+    top: 73%;
+    right: 10%;
+    border-radius: 10px;
+    box-shadow: 3px 5px 7px #171717; 
+}
+
+.legend-item{
+    border-radius: 10px;
+    background-color: #3e849c;
+    background-image: none;
+    display: flex;
+    align-items: center;
+}
+
+.legend-square{
+    background-color: #3e849c;
+    background-image: none;
+    min-width: 20px;
+    min-height: 20px;
+    margin: 10px;
+    background-color: #b14e4e;
+    box-shadow: 1px 1px 1px #505050; 
+}
+
+.legend-text {
+    background-color: #3e849c;
+    background-image: none;
+    color: #fff;
+}
+
+#index-square {
+    background-color:#cce4db;
+}
+
+#middle-square{
+    background-color: #f3bccc;
+}
+
+#ring-square{
+    background-color: #eb7777;
+}
+
+#pinky-square{
+    background-color: #ffc97e;
+}
+
+#thumb-square{
+    background-color: #82bbeb;
+}
+
+
 .keyboard-base {
     max-width: max-content;
     padding: 15px;
