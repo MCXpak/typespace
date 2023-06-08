@@ -180,6 +180,7 @@ function startGame(){
 
 function startGameNoTutorial(){
   score = 0;
+  gameStart = true;
   showShip();
 }
 
