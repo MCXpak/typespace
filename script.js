@@ -197,7 +197,7 @@ function draw() {
     fill(255,255,255)
     textSize(18);
     textFont(TwoPFont);
-    text("type to destroy asteroid", 300, 290);
+    text("type to destroy the asteroid", 260, 290);
     textFont(defaultFont);
     
     createAsteroid();
