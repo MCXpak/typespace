@@ -174,12 +174,14 @@ let scoreDiv = document.getElementById("score");
 
 function startGame(){
   score = 0;
+  scoreDiv.textContent = `Score: ${score}`
   tutorial = true;
   showShip();
 }
 
 function startGameNoTutorial(){
   score = 0;
+  scoreDiv.textContent = `Score: ${score}`
   gameStart = true;
   showShip();
 }
