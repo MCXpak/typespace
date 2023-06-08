@@ -178,6 +178,11 @@ function startGame(){
   showShip();
 }
 
+function startGameNoTutorial(){
+  score = 0;
+  showShip();
+}
+
 let titleScreen = document.getElementById('title-screen');
 let gameOver = document.getElementById('game-over');
 
